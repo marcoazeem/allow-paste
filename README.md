@@ -32,3 +32,7 @@ After changing the code, click the reload icon on the extension and refresh the 
 
 - `manifest.json` - extension manifest
 - `content.js` - the paste-unblocking logic
+
+## License
+
+MIT - see [LICENSE](LICENSE).
