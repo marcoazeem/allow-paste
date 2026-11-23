@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Allow Paste",
+  "version": "1.0.0",
+  "description": "Re-enables pasting into text fields that block it.",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ]
+}
