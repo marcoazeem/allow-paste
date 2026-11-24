@@ -12,10 +12,23 @@ function allow(e) {
   e.stopImmediatePropagation();
 }
 
-// Drag/drop events.
-for (const type of ["drop", "dragover", "dragenter"]) {
-  window.addEventListener(type, allow, true);
-}
+// Text dropped into a field. File drags and drops are left alone so upload
+// zones keep working, and dragover/dragenter are never touched.
+window.addEventListener(
+  "drop",
+  (e) => {
+    const types = e.dataTransfer ? Array.from(e.dataTransfer.types) : [];
+    if (types.includes("Files")) return;
+    const el = e.target;
+    const editable =
+      el &&
+      (el.isContentEditable ||
+        el.tagName === "TEXTAREA" ||
+        el.tagName === "INPUT");
+    if (editable) allow(e);
+  },
+  true
+);
 
 function insertText(el, text) {
   // execCommand fires real input events, so frameworks (React etc.) notice.
@@ -66,13 +79,11 @@ for (const type of ["keydown", "keypress", "keyup"]) {
   );
 }
 
-// Sites that block via beforeinput (inputType "insertFromPaste"/"insertFromDrop").
+// Sites that block via beforeinput (inputType "insertFromPaste").
 window.addEventListener(
   "beforeinput",
   (e) => {
-    if (e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop") {
-      allow(e);
-    }
+    if (e.inputType === "insertFromPaste") allow(e);
   },
   true
 );

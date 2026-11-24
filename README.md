@@ -17,9 +17,13 @@ After changing the code, click the reload icon on the extension and refresh the 
 
 `content.js` runs at `document_start` on every page and registers capture-phase listeners on `window`, so it fires before the site's own scripts:
 
-- `paste`, `drop`, Cmd/Ctrl+V, Shift+Insert and `beforeinput` events are hidden from the page's handlers with `stopImmediatePropagation()`, so the site cannot cancel them.
+- `paste`, Cmd/Ctrl+V, Shift+Insert and paste `beforeinput` events (plus text drops into fields; file drags are left alone) are hidden from the page's handlers with `stopImmediatePropagation()`, so the site cannot cancel them.
 - On `paste`, the extension reads the clipboard text from the event and inserts it itself (`execCommand("insertText")`, falling back to `setRangeText` plus `input`/`change` events), so frameworks such as React notice the change.
 - Inline `onpaste`, `ondrop` and `onbeforepaste` attributes are removed as a backup.
+
+## Changelog
+
+- **Fixed:** the extension no longer breaks drag and drop of files into the browser or upload zones.
 
 ## Limitations
 
